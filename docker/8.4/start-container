@@ -6,6 +6,11 @@ if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "sail" ];
 fi
 
 if [ ! -z "$WWWUSER" ]; then
+    # HACK: 権限関連の問題
+    # laravel.test コンテナに uid=1000 のユーザー(ubuntu) がすでに存在するため sail ユーザーのuid を $WWWUSER=1000 に変更できない
+    # 先にubuntuユーザーのuidを変更してからsailユーザーのuidを変更する
+    usermod -u 1001 ubuntu
+
     usermod -u $WWWUSER sail
 fi
 
